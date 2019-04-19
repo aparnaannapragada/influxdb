@@ -331,6 +331,10 @@ func ParseTags(buf []byte) Tags {
 	return parseTags(buf, nil)
 }
 
+func ParseTagsWithTags(buf []byte, tags Tags) Tags {
+	return parseTags(buf, tags)
+}
+
 func ParseName(buf []byte) []byte {
 	// Ignore the error because scanMeasurement returns "missing fields" which we ignore
 	// when just parsing a key
