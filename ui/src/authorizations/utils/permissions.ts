@@ -1,4 +1,4 @@
-import {Permission, PermissionResource} from '@influxdata/influx'
+import {Permission, PermissionResource, Bucket} from '@influxdata/influx'
 
 // Types
 
@@ -112,3 +112,43 @@ export const allAccessPermissions = (orgID: string) => [
     resource: {type: PermissionResource.TypeEnum.Documents, orgID},
   },
 ]
+
+export const specificBucketsPermissions = (
+  buckets: Bucket[],
+  permission: Permission.ActionEnum
+): Permission[] => {
+  return buckets.map(b => {
+    return {
+      action: permission,
+      resource: {
+        type: PermissionResource.TypeEnum.Buckets,
+        orgID: b.organizationID,
+        id: b.id,
+      },
+    }
+  })
+}
+
+export const allBucketsPermissions = (
+  orgID: string,
+  permission: Permission.ActionEnum
+): Permission[] => {
+  return [
+    {
+      action: permission,
+      resource: {type: PermissionResource.TypeEnum.Documents, orgID},
+    },
+  ]
+}
+
+export const bucketPermissions = (
+  orgID: string,
+  permission: Permission.ActionEnum,
+  buckets: Bucket[]
+): Permission[] => {
+  if (!buckets) {
+    return allBucketsPermissions(orgID, permission)
+  }
+
+  return specificBucketsPermissions(buckets, permission)
+}
